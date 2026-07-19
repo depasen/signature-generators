@@ -3,13 +3,13 @@ import Link from 'next/link'
 export default function HomePage() {
   const tools = [
     {
-      href: '/pip',
+      href: '/pip-signature',
       eyebrow: 'Pacific Integrative Psychiatry',
       title: 'PIP Signature Generator',
       body: 'Create a branded PIP email signature. Fill in your details, preview it live, and copy it straight into your email client.',
     },
     {
-      href: '/ib',
+      href: '/ib-signature',
       eyebrow: 'IntraBalance',
       title: 'IB Signature Generator',
       body: 'Create a branded IntraBalance email signature with the same live preview and one-click copy.',

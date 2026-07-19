@@ -9,8 +9,8 @@ their details, preview live, and copy the signature into their email client.
 | Path  | Tool                              |
 | ----- | --------------------------------- |
 | `/`   | Landing page linking to both      |
-| `/pip` | PIP email-signature generator    |
-| `/ib`  | IntraBalance email-signature generator |
+| `/pip-signature` | PIP email-signature generator    |
+| `/ib-signature`  | IntraBalance email-signature generator |
 
 ## How it works
 
@@ -31,7 +31,7 @@ These two generators were extracted from the `depasen/pip-wellness` design site
 (routes `app/signature-generator` and `app/ib-signature-generator`) into this
 standalone repo so the design site can be locked private without taking the
 signature tools offline. The extracted code is unchanged apart from the route
-paths (`/signature-generator` → `/pip`, `/ib-signature-generator` → `/ib`).
+paths (`/signature-generator` → `/pip-signature`, `/ib-signature-generator` → `/ib-signature`).
 
 ## Local development
 
