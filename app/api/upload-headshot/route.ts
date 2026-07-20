@@ -100,11 +100,17 @@ export async function POST(request: NextRequest) {
   if (!commit.ok) {
     const detail = await commit.text()
     console.log("[v0] GitHub upload failed:", commit.status, detail)
+    let ghMsg = ""
+    try {
+      ghMsg = JSON.parse(detail)?.message || ""
+    } catch {
+      ghMsg = detail.slice(0, 140)
+    }
     const friendly =
       commit.status === 401 || commit.status === 403
         ? `The server's GitHub token is invalid or lacks write access to ${REPO}.`
-        : "Could not upload the image to GitHub. Please try again."
-    return NextResponse.json({ error: friendly }, { status: 502 })
+        : `Could not upload to GitHub (${commit.status}${ghMsg ? `: ${ghMsg}` : ""}). Please try again.`
+    return NextResponse.json({ error: friendly, githubStatus: commit.status }, { status: 502 })
   }
 
   // jsDelivr serves the committed file (may take a few seconds to propagate).
