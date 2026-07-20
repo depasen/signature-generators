@@ -81,21 +81,31 @@ export async function POST(request: NextRequest) {
   const contentBase64 = buffer.toString("base64")
 
   const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${encodeURIComponent(path)}`
-
-  const commit = await fetch(apiUrl, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/vnd.github+json",
-      "X-GitHub-Api-Version": "2022-11-28",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      message: `Add headshot for ${name || "teammate"} (signature generator)`,
-      content: contentBase64,
-      branch: BRANCH,
-    }),
+  const putBody = JSON.stringify({
+    message: `Add headshot for ${name || "teammate"} (signature generator)`,
+    content: contentBase64,
+    branch: BRANCH,
   })
+
+  // GitHub serializes commits per branch and intermittently returns 503 ("No
+  // server is currently available to service your request") — or 409/429 — when
+  // uploads land close together. These are transient, so retry with backoff.
+  const RETRY_ON = new Set([409, 429, 500, 502, 503])
+  let commit: Response = new Response(null, { status: 500 })
+  for (let attempt = 1; attempt <= 5; attempt++) {
+    commit = await fetch(apiUrl, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+        "Content-Type": "application/json",
+      },
+      body: putBody,
+    })
+    if (commit.ok || !RETRY_ON.has(commit.status) || attempt === 5) break
+    await new Promise((r) => setTimeout(r, 500 * attempt)) // 500ms → 2s
+  }
 
   if (!commit.ok) {
     const detail = await commit.text()
