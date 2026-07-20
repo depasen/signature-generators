@@ -301,6 +301,23 @@ export default function IbSignatureGeneratorPage() {
   const [uploadMsg, setUploadMsg] = useState<string>("")
   const [dragging, setDragging] = useState(false)
 
+  // Prefill from URL query params so an admin can hand someone a ready-made link,
+  // e.g. ?style=light&name=Jane%20Doe&title=...&email=...&phone=...&headshot=...
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const p = new URLSearchParams(window.location.search)
+    setFields((prev) => {
+      const next = { ...prev }
+      for (const k of ["name", "title", "email", "phone", "headshot"] as const) {
+        const v = p.get(k)
+        if (v) next[k] = v
+      }
+      return next
+    })
+    const style = (p.get("style") || p.get("variant") || "").toLowerCase()
+    if (style === "light" || style === "dark") setVariant(style as Variant)
+  }, [])
+
   const set = (key: keyof Fields) => (v: string) => {
     setFields((prev) => ({ ...prev, [key]: v }))
     setCopied(false)
