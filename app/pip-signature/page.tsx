@@ -614,7 +614,7 @@ export default function SignatureGeneratorPage() {
                 onClick={copyRendered}
                 className="pip-cta rounded-md bg-abyss px-4 py-2.5 text-sm font-semibold text-white"
               >
-                {copied ? "Copied!" : "Copy signature"}
+                {copied ? "Copied!" : `Copy ${variant === "dark" ? "dark" : "light"} signature`}
               </button>
               <button
                 type="button"
@@ -645,23 +645,31 @@ export default function SignatureGeneratorPage() {
 
           {/* ---- Preview ---- */}
           <section aria-label="Live preview" className="rounded-lg border border-hairline bg-white p-6 shadow-brand-sm">
-            <div className="flex items-center justify-between">
-              <h2 className="font-serif text-xl font-semibold text-ink">Live preview</h2>
-              <div className="inline-flex overflow-hidden rounded-md border border-hairline text-xs font-semibold">
-                <button
-                  type="button"
-                  onClick={() => setPreviewDark(false)}
-                  className={`px-3 py-1.5 transition ${!previewDark ? "bg-abyss text-white" : "bg-white text-muted"}`}
-                >
-                  Light
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPreviewDark(true)}
-                  className={`px-3 py-1.5 transition ${previewDark ? "bg-abyss text-white" : "bg-white text-muted"}`}
-                >
-                  Dark
-                </button>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h2 className="inline-flex items-center gap-2 font-serif text-xl font-semibold text-ink">
+                Live preview
+                <span className="rounded-full border border-hairline px-2 py-0.5 font-sans text-xs font-semibold text-ink">
+                  {variant === "dark" ? "Dark style" : "Light style"}
+                </span>
+              </h2>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted">Preview against:</span>
+                <div className="inline-flex overflow-hidden rounded-md border border-hairline text-xs font-semibold">
+                  <button
+                    type="button"
+                    onClick={() => setPreviewDark(false)}
+                    className={`px-3 py-1.5 transition ${!previewDark ? "bg-abyss text-white" : "bg-white text-muted"}`}
+                  >
+                    Light bg
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPreviewDark(true)}
+                    className={`px-3 py-1.5 transition ${previewDark ? "bg-abyss text-white" : "bg-white text-muted"}`}
+                  >
+                    Dark bg
+                  </button>
+                </div>
               </div>
             </div>
 
