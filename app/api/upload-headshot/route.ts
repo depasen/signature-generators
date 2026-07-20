@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
   // uploads land close together. These are transient, so retry with backoff.
   const RETRY_ON = new Set([409, 429, 500, 502, 503])
   let commit: Response = new Response(null, { status: 500 })
-  for (let attempt = 1; attempt <= 5; attempt++) {
+  for (let attempt = 1; attempt <= 6; attempt++) {
     commit = await fetch(apiUrl, {
       method: "PUT",
       headers: {
@@ -103,8 +103,10 @@ export async function POST(request: NextRequest) {
       },
       body: putBody,
     })
-    if (commit.ok || !RETRY_ON.has(commit.status) || attempt === 5) break
-    await new Promise((r) => setTimeout(r, 500 * attempt)) // 500ms → 2s
+    if (commit.ok || !RETRY_ON.has(commit.status) || attempt === 6) break
+    // Jittered backoff: simultaneous uploads must NOT retry in lockstep, or they
+    // just re-collide on GitHub's per-branch commit lock. Randomize each wait.
+    await new Promise((r) => setTimeout(r, 300 + Math.random() * 700 * attempt))
   }
 
   if (!commit.ok) {
