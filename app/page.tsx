@@ -14,11 +14,17 @@ export default function HomePage() {
       title: 'IB Signature Generator',
       body: 'Create a branded IntraBalance email signature with the same live preview and one-click copy.',
     },
+    {
+      href: '/es-signature',
+      eyebrow: 'Effortless Sleep',
+      title: 'ES Signature Generator',
+      body: 'Create a branded Effortless Sleep email signature for coaches, with the same live preview and one-click copy.',
+    },
   ]
 
   return (
     <main className="min-h-screen bg-porcelain">
-      <div className="mx-auto max-w-3xl px-5 py-14 md:py-20">
+      <div className="mx-auto max-w-5xl px-5 py-14 md:py-20">
         <p className="pip-eyebrow text-copper">Internal tools</p>
         <h1 className="mt-2 font-serif text-3xl font-semibold text-ink md:text-4xl text-balance">
           Email Signature Generators
@@ -28,7 +34,7 @@ export default function HomePage() {
           straight into your email client &mdash; no login required.
         </p>
 
-        <div className="mt-10 grid gap-6 sm:grid-cols-2">
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {tools.map((tool) => (
             <Link
               key={tool.href}

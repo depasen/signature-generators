@@ -21,9 +21,9 @@ const figtree = Figtree({
 })
 
 export const metadata: Metadata = {
-  title: 'PIP & IB Email Signature Generators',
+  title: 'PIP, IB & ES Email Signature Generators',
   description:
-    'Internal tools to generate branded email signatures for Pacific Integrative Psychiatry and IntraBalance.',
+    'Internal tools to generate branded email signatures for Pacific Integrative Psychiatry, IntraBalance and Effortless Sleep.',
 }
 
 export const viewport: Viewport = {

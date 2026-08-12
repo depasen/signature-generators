@@ -4,21 +4,26 @@ import { type NextRequest, NextResponse } from "next/server"
  * Uploads a teammate headshot to a brand assets repo via the GitHub
  * Contents API, then returns the hosted jsDelivr URL.
  *
- * Supports two brands via the `brand` form field:
- *   - "pip" -> depasen/pip-brand-assets  (default)
+ * Supports three brands via the `brand` form field:
+ *   - "pip" -> depasen/pip-brand-assets  (default when the field is absent)
  *   - "ib"  -> depasen/ib-brand-assets
+ *   - "es"  -> depasen/es-brand-assets, under signature/
  *
  * Requires env var PIP_ASSETS_GITHUB_TOKEN — a token with Contents:
- * Read and write on BOTH depasen/pip-brand-assets and
- * depasen/ib-brand-assets.
+ * Read and write on ALL THREE of depasen/pip-brand-assets,
+ * depasen/ib-brand-assets and depasen/es-brand-assets.
  * ------------------------------------------------------------------ */
 
 const OWNER = "depasen"
 const BRANCH = "main"
 
-const BRANDS: Record<string, { repo: string; prefix: string }> = {
-  pip: { repo: "pip-brand-assets", prefix: "pip-headshot" },
-  ib: { repo: "ib-brand-assets", prefix: "ib-headshot" },
+/* `dir` is the folder the headshot lands in, "" meaning the repo root. PIP and
+ * IB keep everything flat at the root; the ES repo is a full brand kit, so its
+ * signature assets live in one folder rather than scattered through it. */
+const BRANDS: Record<string, { repo: string; prefix: string; dir: string }> = {
+  pip: { repo: "pip-brand-assets", prefix: "pip-headshot", dir: "" },
+  ib: { repo: "ib-brand-assets", prefix: "ib-headshot", dir: "" },
+  es: { repo: "es-brand-assets", prefix: "es-headshot", dir: "signature" },
 }
 
 const ALLOWED = new Set(["image/jpeg", "image/png", "image/webp"])
@@ -57,8 +62,20 @@ export async function POST(request: NextRequest) {
 
   const file = form.get("file")
   const name = String(form.get("name") || "").trim()
-  const brandKey = String(form.get("brand") || "pip").trim().toLowerCase()
-  const brand = BRANDS[brandKey] || BRANDS.pip
+  // An ABSENT brand field still means PIP, for back-compatibility. A PRESENT
+  // but unrecognised one is rejected rather than quietly redirected: the old
+  // `BRANDS[key] || BRANDS.pip` fallback meant a typo, or a new brand added to
+  // a page but not here, silently committed someone's face into the wrong
+  // brand's repo and handed back a URL that looked perfectly fine.
+  const rawBrand = form.get("brand")
+  const brandKey = rawBrand === null ? "pip" : String(rawBrand).trim().toLowerCase() || "pip"
+  const brand = BRANDS[brandKey]
+  if (!brand) {
+    return NextResponse.json(
+      { error: `Unknown brand "${brandKey}". Expected one of: ${Object.keys(BRANDS).join(", ")}.` },
+      { status: 400 },
+    )
+  }
   const REPO = brand.repo
 
   if (!(file instanceof File)) {
@@ -75,7 +92,7 @@ export async function POST(request: NextRequest) {
   // Unique-ish filename: name slug + short timestamp so re-uploads don't clash.
   const stamp = Date.now().toString(36).slice(-5)
   const filename = `${brand.prefix}-${slugify(name)}-${stamp}.${ext}`
-  const path = filename
+  const path = brand.dir ? `${brand.dir}/${filename}` : filename
 
   const buffer = Buffer.from(await file.arrayBuffer())
   const contentBase64 = buffer.toString("base64")

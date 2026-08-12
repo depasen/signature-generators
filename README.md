@@ -1,16 +1,18 @@
-# PIP + IB Email Signature Generators
+# PIP + IB + ES Email Signature Generators
 
 Standalone, publicly usable email-signature generators for **Pacific Integrative
-Psychiatry** and **IntraBalance**. No login required — staff open a URL, fill in
-their details, preview live, and copy the signature into their email client.
+Psychiatry**, **IntraBalance** and **Effortless Sleep**. No login required —
+staff and coaches open a URL, fill in their details, preview live, and copy the
+signature into their email client.
 
 ## Routes
 
 | Path  | Tool                              |
 | ----- | --------------------------------- |
-| `/`   | Landing page linking to both      |
+| `/`   | Landing page linking to all three |
 | `/pip-signature` | PIP email-signature generator    |
 | `/ib-signature`  | IntraBalance email-signature generator |
+| `/es-signature`  | Effortless Sleep email-signature generator |
 
 ## How it works
 
@@ -24,6 +26,34 @@ they render the same regardless of which domain the generator itself is hosted o
 
 - PIP: `https://cdn.jsdelivr.net/gh/depasen/pip-brand-assets@main`
 - IB: `https://cdn.jsdelivr.net/gh/depasen/ib-brand-assets@main`
+- ES: `https://cdn.jsdelivr.net/gh/depasen/es-brand-assets@main/signature`
+
+**jsDelivr only serves PUBLIC repos.** Measured 2026-08-12: a request against a
+private repo returns 404, not 403 — so a signature built from a private asset
+repo looks perfect in the generator's own preview and arrives with every image
+broken in the recipient's inbox. If the ES repo is ever made private again, or
+the assets move, change `CDN` at the top of `app/es-signature/page.tsx` and the
+matching `es` entry in `app/api/upload-headshot/route.ts` together — the page
+builds the markup, the route decides where uploaded headshots land, and they
+must agree or headshots 404 while everything else works.
+
+## Effortless Sleep — three deliberate differences from the other two
+
+Each one is a rule, not drift, so don't "tidy" them back into line with IB:
+
+1. **No pattern behind the mark.** IB tiles its woven pattern behind its logo
+   cell. The ES brand kit forbids exactly that — the pattern is a surface in its
+   own right and never sits with the logo. ES uses a solid panel, which also
+   means it needs no Outlook VML tile fallback.
+2. **No social row.** Effortless Sleep has no social accounts of its own; the
+   site's own schema points at IntraBalance's and PIP's. Borrowing another
+   brand's feed for a coach's signature would be wrong, so the row is omitted.
+3. **The website line shows `geteffortlesssleep.com` and links to
+   `effortlesssleep.co`.** That is the standing domain rule, not a typo: ".co"
+   is misheard and mistyped as ".com", so the longer domain is the safe one to
+   read off a screen or printout while every href stays canonical. The redirect
+   preserves path and query. The page explains this to the user so nobody
+   "corrects" it.
 
 ## Origin
 
