@@ -28,14 +28,24 @@ they render the same regardless of which domain the generator itself is hosted o
 - IB: `https://cdn.jsdelivr.net/gh/depasen/ib-brand-assets@main`
 - ES: `https://cdn.jsdelivr.net/gh/depasen/es-brand-assets@main/signature`
 
-**jsDelivr only serves PUBLIC repos.** Measured 2026-08-12: a request against a
-private repo returns 404, not 403 — so a signature built from a private asset
-repo looks perfect in the generator's own preview and arrives with every image
-broken in the recipient's inbox. If the ES repo is ever made private again, or
-the assets move, change `CDN` at the top of `app/es-signature/page.tsx` and the
-matching `es` entry in `app/api/upload-headshot/route.ts` together — the page
-builds the markup, the route decides where uploaded headshots land, and they
-must agree or headshots 404 while everything else works.
+**jsDelivr only serves PUBLIC repos.** Headshot publication therefore fails
+closed unless the exact brand target is publicly readable. PIP and IB use
+separate `PIP_SIGNATURE_ASSETS_GITHUB_TOKEN` and
+`IB_SIGNATURE_ASSETS_GITHUB_TOKEN` identities, each scoped only to its bound
+asset repository. Every request names its brand explicitly, and the route
+rejects a credential reused across brand identities. The old cross-brand token
+is not accepted.
+
+Effortless Sleep's asset repository remains private and is not a publication
+target. ES headshot uploads return `public_target_unavailable` until an exact
+public target and its distinct least-privilege identity are separately
+authorized in code. Do not make `es-brand-assets` public to satisfy this route.
+
+Published headshots use a full SHA-256 content address. The route first writes
+and reads back a durable reservation, then creates or reconciles the exact
+asset, resolves the immutable commit, and verifies the unauthenticated public
+bytes and SHA-256 before returning a commit-pinned URL. An ambiguous write is
+never blindly repeated.
 
 ## Effortless Sleep — three deliberate differences from the other two
 
