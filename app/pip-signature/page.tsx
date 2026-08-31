@@ -330,6 +330,7 @@ export default function SignatureGeneratorPage() {
       const body = new FormData()
       body.append("file", square, "headshot.jpg")
       body.append("name", fields.name || "teammate")
+      body.append("brand", "pip")
       const res = await fetch("/api/upload-headshot", { method: "POST", body })
       const data = await res.json()
       if (!res.ok) throw new Error(data?.error || "Upload failed.")
