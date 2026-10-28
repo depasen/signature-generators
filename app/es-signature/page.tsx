@@ -161,11 +161,11 @@ function buildSignature(f: Fields, variant: Variant = "dark"): string {
 
   // Right cell: the website's own stacked logo on a solid panel. A flat
   // bgcolor renders natively everywhere, so no VML fallback is needed.
-  const markCell = `<td class="esh-mark-cell" width="150" bgcolor="${t.panel}" style="width:150px;vertical-align:middle;text-align:center;padding:18px 16px;border-left:1px solid ${t.panelBorder};background-color:${t.panel};">
+  const markCell = `<td class="esh-mark-cell" width="172" bgcolor="${t.panel}" style="width:172px;vertical-align:middle;text-align:center;padding:14px 14px;border-left:1px solid ${t.panelBorder};background-color:${t.panel};">
           <a href="${WEB_HREF}" target="_blank" style="display:inline-block;border:0;outline:none;text-decoration:none;">
             <img src="${CDN}/${t.lockup}"
-                 width="112" height="63" alt="Effortless Sleep™"
-                 style="width:112px;height:63px;display:block;margin:0 auto;border:0;outline:none;">
+                 width="144" height="81" alt="Effortless Sleep™"
+                 style="width:144px;height:81px;display:block;margin:0 auto;border:0;outline:none;">
           </a>
         </td>`
 
