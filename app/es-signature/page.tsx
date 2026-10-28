@@ -167,7 +167,6 @@ function buildSignature(f: Fields, variant: Variant = "dark"): string {
                  width="112" height="63" alt="Effortless Sleep™"
                  style="width:112px;height:63px;display:block;margin:0 auto;border:0;outline:none;">
           </a>
-          <div style="font-size:9.5px;letter-spacing:.06em;color:${t.tagline};padding-top:8px;line-height:1.3;">by IntraBalance LLC</div>
         </td>`
 
   return `<div data-spark-custom-html="true">
