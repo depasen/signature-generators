@@ -80,50 +80,54 @@ type Variant = "dark" | "light"
 const THEMES: Record<
   Variant,
   {
-    tableStyleExtra: string
+    card: string
+    cardBorder: string
     ring: string
     name: string
     title: string
     accent: string
-    company: string
     tagline: string
     contact: string
     sep: string
     iconSuffix: string
-    mark: string
-    markFill: string
-    markBorder: string
+    lockup: string
+    panel: string
+    panelBorder: string
   }
 > = {
+  /* Dark matches the website's night sky and footer: es-ink navy, the
+   * site's own logo (blush crescent, aqua water, white wordmark). */
   dark: {
-    tableStyleExtra: "background-color:#0E2E4E;",
-    ring: "rgba(53,196,192,0.55)",
-    name: "#EFFBFD",
+    card: "#0C2440",
+    cardBorder: "#0C2440",
+    ring: "rgba(127,216,212,0.6)",
+    name: "#F5FFFF",
     title: "#7FD8D4",
     accent: "#E8795C",
-    company: "#35C4C0",
     tagline: "#A8CBEE",
     contact: "#DCEFF5",
     sep: "#2F5B85",
     iconSuffix: "-aqua",
-    mark: "es-signature-mark-on-dark.png",
-    markFill: "#0A2038",
-    markBorder: "#1C4270",
+    lockup: "es-signature-lockup-dark.png",
+    panel: "#0A1E36",
+    panelBorder: "#1C3A5E",
   },
+  /* Light matches the website's light theme: warm ivory paper, ink text,
+   * the navy/teal logo cut made for pale grounds, coralDeep accent. */
   light: {
-    tableStyleExtra: "background-color:#EFFBFD;border:1px solid #D3DFEA;",
-    ring: "rgba(22,110,118,0.45)",
+    card: "#F9F2EB",
+    cardBorder: "#E7DDD1",
+    ring: "rgba(199,95,68,0.45)",
     name: "#0C2440",
-    title: "#6E88A3",
+    title: "#166E76",
     accent: "#C75F44",
-    company: "#166E76",
     tagline: "#6E88A3",
     contact: "#3A5470",
-    sep: "#D3DFEA",
+    sep: "#E7DDD1",
     iconSuffix: "-deep",
-    mark: "es-signature-mark-on-light.png",
-    markFill: "#E6F7F8",
-    markBorder: "#D3DFEA",
+    lockup: "es-signature-lockup-light.png",
+    panel: "#FBEBE1",
+    panelBorder: "#E7DDD1",
   },
 }
 
@@ -152,17 +156,18 @@ function buildSignature(f: Fields, variant: Variant = "dark"): string {
 
   // Optional phone segment — omitted entirely if the coach clears it.
   const phoneBlock = phone
-    ? `<a href="tel:${tel}" target="_blank" style="text-decoration:none;color:${t.contact};white-space:nowrap;"><img src="${CDN}/es-ic-phone${t.iconSuffix}.png" width="13" height="13" alt="Phone" style="width:13px;height:13px;border:0;outline:none;vertical-align:-2px;">&nbsp;&nbsp;<span style="color:${t.contact};">${phoneEsc}</span></a>&nbsp;&nbsp;&nbsp;<span style="color:${t.sep};" aria-hidden="true">|</span>&nbsp;&nbsp;&nbsp;`
+    ? `<a href="tel:${tel}" target="_blank" style="text-decoration:none;color:${t.contact};white-space:nowrap;"><img src="${CDN}/es-ic-phone${t.iconSuffix}.png" width="13" height="13" alt="Phone" style="width:13px;height:13px;border:0;outline:none;vertical-align:-2px;">&nbsp;&nbsp;<span style="color:${t.contact};">${phoneEsc}</span></a><br>`
     : ""
 
-  // Right cell: solid panel, no pattern (see rule 1 at the top of this file).
-  // A flat bgcolor renders natively everywhere, so no VML fallback is needed.
-  const markCell = `<td class="esh-mark-cell" width="96" bgcolor="${t.markFill}" style="width:96px;vertical-align:middle;text-align:center;padding:16px 18px 16px 0;border-left:1px solid ${t.markBorder};background-color:${t.markFill};">
-          <a href="${WEB_HREF}" target="_blank" style="display:inline-block;border:0;outline:none;">
-            <img src="${CDN}/${t.mark}"
-                 width="48" height="46" alt="Effortless Sleep"
-                 style="width:48px;height:46px;display:inline-block;border:0;outline:none;">
+  // Right cell: the website's own stacked logo on a solid panel. A flat
+  // bgcolor renders natively everywhere, so no VML fallback is needed.
+  const markCell = `<td class="esh-mark-cell" width="150" bgcolor="${t.panel}" style="width:150px;vertical-align:middle;text-align:center;padding:18px 16px;border-left:1px solid ${t.panelBorder};background-color:${t.panel};">
+          <a href="${WEB_HREF}" target="_blank" style="display:inline-block;border:0;outline:none;text-decoration:none;">
+            <img src="${CDN}/${t.lockup}"
+                 width="112" height="63" alt="Effortless Sleep™"
+                 style="width:112px;height:63px;display:block;margin:0 auto;border:0;outline:none;">
           </a>
+          <div style="font-size:9.5px;letter-spacing:.06em;color:${t.tagline};padding-top:8px;line-height:1.3;">by IntraBalance LLC</div>
         </td>`
 
   return `<div data-spark-custom-html="true">
@@ -189,23 +194,23 @@ function buildSignature(f: Fields, variant: Variant = "dark"): string {
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600"><tr><td>
     <![endif]-->
 
-    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;border-collapse:separate;${t.tableStyleExtra}border-radius:14px;overflow:hidden;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" bgcolor="${t.card}" style="width:100%;max-width:560px;border-collapse:separate;background-color:${t.card};border:1px solid ${t.cardBorder};border-radius:14px;overflow:hidden;">
     <tbody>
       <tr>
 
         <!-- LEFT: headshot -->
-        <td width="90" style="width:90px;vertical-align:middle;text-align:center;padding:16px 0 16px 18px;">
+        <td width="92" style="width:92px;vertical-align:middle;text-align:center;padding:18px 0 18px 20px;">
           <a href="${WEB_HREF}" target="_blank" style="display:inline-block;border:0;outline:none;text-decoration:none;">
             <img src="${headshot}"
-                 width="68" height="68" alt="${name}"
-                 style="width:68px;height:68px;border-radius:50%;display:inline-block;border:0;outline:none;object-fit:cover;box-shadow:0 0 0 2px ${t.ring};">
+                 width="72" height="72" alt="${name}"
+                 style="width:72px;height:72px;border-radius:50%;display:inline-block;border:0;outline:none;object-fit:cover;box-shadow:0 0 0 2px ${t.ring};">
           </a>
         </td>
 
         <!-- MIDDLE: identity + contact -->
-        <td style="vertical-align:middle;padding:16px 18px;">
+        <td style="vertical-align:middle;padding:18px 20px 18px 16px;">
           <div style="line-height:1.2;">
-            <span style="font-family:'Newsreader',Georgia,serif;font-size:18px;font-weight:600;color:${t.name};letter-spacing:.005em;">${name}</span>
+            <span style="font-family:'Newsreader',Georgia,serif;font-size:20px;font-weight:500;color:${t.name};letter-spacing:.005em;">${name}</span>
           </div>
           <div style="line-height:1.4;padding-top:2px;">
             <span style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:${t.title};">${title}</span>
@@ -217,14 +222,7 @@ function buildSignature(f: Fields, variant: Variant = "dark"): string {
             </tr></table>
           </div>
 
-          <div style="line-height:1.35;">
-            <span style="font-family:'Newsreader',Georgia,serif;font-size:12.5px;font-weight:600;color:${t.company};letter-spacing:.01em;">Effortless Sleep<span style="font-size:9px;vertical-align:3px;">&#8482;</span></span>
-          </div>
-          <div style="line-height:1.4;padding-top:1px;">
-            <span style="font-size:10.5px;color:${t.tagline};">by IntraBalance LLC</span>
-          </div>
-
-          <div style="line-height:1.7;font-size:11px;color:${t.contact};padding-top:8px;">
+          <div style="line-height:1.75;font-size:11.5px;color:${t.contact};padding-top:4px;">
             ${phoneBlock}<a href="${WEB_HREF}" target="_blank" style="text-decoration:none;color:${t.contact};white-space:nowrap;"><img src="${CDN}/es-ic-web${t.iconSuffix}.png" width="13" height="13" alt="Website" style="width:13px;height:13px;border:0;outline:none;vertical-align:-2px;">&nbsp;&nbsp;<span style="color:${t.contact};">${WEB_LABEL}</span></a><br>
             <a href="mailto:${email}" target="_blank" style="text-decoration:none;color:${t.contact};white-space:nowrap;"><img src="${CDN}/es-ic-email${t.iconSuffix}.png" width="13" height="13" alt="Email" style="width:13px;height:13px;border:0;outline:none;vertical-align:-2px;">&nbsp;&nbsp;<span style="color:${t.contact};">${emailEsc}</span></a>
           </div>
@@ -499,8 +497,8 @@ export default function EsSignatureGeneratorPage() {
                 <div className="mt-2 grid grid-cols-2 gap-3">
                   {(
                     [
-                      { key: "dark", label: "Dark", desc: "Midnight card" },
-                      { key: "light", label: "Light", desc: "Moonlight card" },
+                      { key: "dark", label: "Dark", desc: "Night navy, like the website" },
+                      { key: "light", label: "Light", desc: "Warm ivory, like the website" },
                     ] as { key: Variant; label: string; desc: string }[]
                   ).map((opt) => (
                     <label
