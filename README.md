@@ -26,7 +26,7 @@ they render the same regardless of which domain the generator itself is hosted o
 
 - PIP: `https://cdn.jsdelivr.net/gh/depasen/pip-brand-assets@main`
 - IB: `https://cdn.jsdelivr.net/gh/depasen/ib-brand-assets@main`
-- ES: `https://cdn.jsdelivr.net/gh/depasen/es-brand-assets@main/signature`
+- ES: `https://cdn.jsdelivr.net/gh/depasen/es-signature-assets@main` (public repo with only the signature images; the full kit in es-brand-assets is private and jsDelivr cannot serve it)
 
 **jsDelivr only serves PUBLIC repos.** Measured 2026-08-12: a request against a
 private repo returns 404, not 403 — so a signature built from a private asset

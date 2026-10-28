@@ -7,11 +7,11 @@ import { type NextRequest, NextResponse } from "next/server"
  * Supports three brands via the `brand` form field:
  *   - "pip" -> depasen/pip-brand-assets  (default when the field is absent)
  *   - "ib"  -> depasen/ib-brand-assets
- *   - "es"  -> depasen/es-brand-assets, under signature/
+ *   - "es"  -> depasen/es-signature-assets (public; the full ES kit stays private)
  *
  * Requires env var PIP_ASSETS_GITHUB_TOKEN — a token with Contents:
  * Read and write on ALL THREE of depasen/pip-brand-assets,
- * depasen/ib-brand-assets and depasen/es-brand-assets.
+ * depasen/ib-brand-assets and depasen/es-signature-assets.
  * ------------------------------------------------------------------ */
 
 const OWNER = "depasen"
@@ -23,7 +23,7 @@ const BRANCH = "main"
 const BRANDS: Record<string, { repo: string; prefix: string; dir: string }> = {
   pip: { repo: "pip-brand-assets", prefix: "pip-headshot", dir: "" },
   ib: { repo: "ib-brand-assets", prefix: "ib-headshot", dir: "" },
-  es: { repo: "es-brand-assets", prefix: "es-headshot", dir: "signature" },
+  es: { repo: "es-signature-assets", prefix: "es-headshot", dir: "" },
 }
 
 const ALLOWED = new Set(["image/jpeg", "image/png", "image/webp"])

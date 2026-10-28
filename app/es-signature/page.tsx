@@ -33,7 +33,7 @@ import { useEffect, useMemo, useRef, useState } from "react"
  *     See WEB_HREF / WEB_LABEL below. Do not "fix" this.
  * ------------------------------------------------------------------ */
 
-const CDN = "https://cdn.jsdelivr.net/gh/depasen/es-brand-assets@main/signature"
+const CDN = "https://cdn.jsdelivr.net/gh/depasen/es-signature-assets@main"
 const DEFAULT_HEADSHOT = `${CDN}/es-signature-avatar-placeholder.png`
 
 /* The two ES domains are not interchangeable, and a signature is the one
